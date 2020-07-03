@@ -161,6 +161,12 @@ class TableCalendar extends StatefulWidget {
   /// Set of Builders for `TableCalendar` to work with.
   final CalendarBuilders builders;
 
+  /// If show a today button on header.
+  final bool showGotoTodayButton;
+
+  /// The goto today button text in it.
+  final String gotoTodayText;
+
   TableCalendar({
     Key key,
     @required this.calendarController,
@@ -200,6 +206,8 @@ class TableCalendar extends StatefulWidget {
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.headerStyle = const HeaderStyle(),
     this.builders = const CalendarBuilders(),
+    this.showGotoTodayButton: true,
+    this.gotoTodayText: "Today",
   })  : assert(calendarController != null),
         assert(availableCalendarFormats.keys.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
@@ -347,6 +355,13 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     return widget.calendarController._getHolidayKey(day);
   }
 
+  void _gotoToday() {
+    setState(() {
+      widget.calendarController.setSelectedDay(DateTime.now());
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return ClipRect(
@@ -399,6 +414,14 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       children.insert(3, _buildFormatButton());
     }
 
+    if (widget.showGotoTodayButton) {
+      if (!widget.calendarController.isToday(widget.calendarController.selectedDay)) {
+        children.insert(2, const SizedBox(width: 8.0));
+        children.insert(3, _buildGotoTodayButton());
+      }
+    }
+
+
     return Container(
       decoration: widget.headerStyle.decoration,
       margin: widget.headerStyle.headerMargin,
@@ -408,6 +431,21 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         children: children,
       ),
     );
+  }
+
+  Widget _buildGotoTodayButton() {
+    return GestureDetector(
+      onTap: _gotoToday,
+      child: Container(
+        decoration: widget.headerStyle.formatButtonDecoration,
+        padding: widget.headerStyle.formatButtonPadding,
+        child: Text(
+          widget.gotoTodayText,
+          style: widget.headerStyle.formatButtonTextStyle,
+        ),
+      ),
+    );
+
   }
 
   Widget _buildFormatButton() {

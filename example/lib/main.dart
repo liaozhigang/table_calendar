@@ -128,6 +128,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget _buildTableCalendar() {
     return TableCalendar(
       calendarController: _calendarController,
+      showGotoTodayButton: true,
       events: _events,
       holidays: _holidays,
       startingDayOfWeek: StartingDayOfWeek.monday,
