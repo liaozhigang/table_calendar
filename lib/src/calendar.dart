@@ -357,7 +357,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   void _gotoToday() {
     setState(() {
-      widget.calendarController.setSelectedDay(DateTime.now());
+      widget.calendarController.setSelectedDay(DateTime.now(), runCallback: true);
     });
   }
 
